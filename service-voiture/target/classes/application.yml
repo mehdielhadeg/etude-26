@@ -1,0 +1,55 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: service-voiture
+  datasource:
+    url: jdbc:h2:mem:voituredb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# Configuration Eureka par défaut
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+---
+# Profil Consul
+spring:
+  config:
+    activate:
+      on-profile: consul
+
+eureka:
+  client:
+    enabled: false
+
+spring.cloud.consul:
+  host: localhost
+  port: 8500
+  discovery:
+    enabled: true
+    register: true
+    prefer-ip-address: true
+    health-check-interval: 10s
